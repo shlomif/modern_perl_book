@@ -5,7 +5,7 @@ Z<implicit_ideas>
 Like many spoken languages, Perl provides linguistic shortcuts.  Context is one
 such feature.  Both the compiler and a programmer reading the code can
 understand the expected number of results or the type of an operation from
-existing information without adding explicit additional information to
+existing information without adding additional explicit information to
 disambiguate.  Others also exist.
 
 =head4 The Default Scalar Variable

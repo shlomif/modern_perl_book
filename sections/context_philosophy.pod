@@ -20,7 +20,7 @@ string value, or a value that's either true or false.
 
 Context can be tricky if you try to write or read Perl code as a series of
 single expressions which stand apart from from their environments.  You may
-find yourself slapping your forehead after a long debugging session when you 
+find yourself slapping your forehead after a long debugging session when you
 discover that your assumptions about context were incorrect.  However, if you're
 cognizant of contexts, they can make your code clearer, more concise, and more
 flexible.
@@ -79,8 +79,8 @@ it in a list evaluates the function in I<list context>:
 =end programlisting
 
 The second line of the previous example may look confusing; the parentheses
-there give a hint to the compiler that although there's only a scalar, this
-assignment should occur in list context.  It's semantically equivalent to
+there give a hint to the compiler that although there's only a single scalar,
+this assignment should occur in list context.  It's semantically equivalent to
 assigning to a scalar and a temporary array, and then throwing away the array,
 except that no assignment to the array actually occurs:
 

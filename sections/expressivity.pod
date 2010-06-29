@@ -69,9 +69,9 @@ If you're new to Perl, don't expect this ability right away.  The flip side of
 Perl's expressivity is that Perl novices can write useful programs before they
 learn all of Perl's powerful features.  The Perl community often refers to this
 as I<baby Perl>.  Though it may sound dismissive, please don't take offense;
-everyone is a novice once.  Take the opportunity to learn from more experienced
-programmers and ask for explanations of idioms and constructs you don't yet
-understand.
+everyone was a novice once.  Take the opportunity to learn from more
+experienced programmers and ask for explanations of idioms and constructs you
+don't yet understand.
 
 Perl is a language intended to grow with your understanding of programming.  It
 won't punish you for writing simple programs.  It allows you to refine and
