@@ -274,7 +274,7 @@ inheritance and multiple potential C<AUTOLOAD> targets.
 
 You may override methods in the default Perl 5 OO system as well as in Moose.
 Unfortunately, core Perl 5 provides no mechanism for indicating your I<intent>
-to override a parent's method.  Worse yet, any function you predeclare,
+to override a parent's method.  Worse yet, any function you pre-declare,
 declare, or import into the child class may override a method in the parent
 class simply by existing and having the same name.
 

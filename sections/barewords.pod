@@ -113,7 +113,7 @@ such as double-quoted strings.
 X<prototypes; barewords>
 
 Constants are a special case of prototyped functions (L<prototypes>).  If
-you've predeclared a prototype for a function, you may use that function as a
+you've pre-declared a prototype for a function, you may use that function as a
 bareword; Perl 5 knows everything it needs to know to parse all occurrences of
 that function appropriately.  Note that all of the drawbacks of prototypes
 still apply.
