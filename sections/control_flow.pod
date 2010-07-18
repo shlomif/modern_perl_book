@@ -871,8 +871,8 @@ the C<while> loop will have nothing to read and will not execute.  To solve
 this problem, you may re-open the file inside the C<for> loop (simple to
 understand, but not always a good use of system resources), slurp the entire
 file into memory (which may not work if the file is large), or C<seek> the
-filehandle back to the beginning of the file for each iteration (an overlooked
-option).
+filehandle back to the beginning of the file for each iteration (an often
+overlooked option).
 
 =head3 Loop Control
 
@@ -967,11 +967,31 @@ If you find yourself nesting loops such that you need labels to manage control
 flow, consider simplifying your code: perhaps extracting inner loops into
 functions for clarity.
 
-=for author
+=head3 Continue
 
-Does anyone care about C<continue>?
+X<continue>
 
-=end for
+The C<continue> construct behaves like the third subexpression of a C<for>
+loop; Perl executes its block for each iteration of the loop, even when you
+exit an iteration with C<next>.  You may use it with may be used with a
+C<while>, C<until>, C<with>, or C<for> loop.  Examples of C<continue> are rare,
+but it's useful any time you want to guarantee that something occurs for every
+iteration of the loop regardless of how that iteration ends:
+
+=begin programlisting
+
+    while ($i < 10 )
+    {
+        next unless $i % 2;
+        say $i;
+    }
+    continue
+    {
+        say 'Continuing...';
+        $i++;
+    }
+
+=end programlisting
 
 =head3 Given/When
 
@@ -1032,6 +1052,35 @@ associated block, multiple C<when> statements match the topic against
 expressions using I<smart-match> semantics.  Thus you might code a Rock, Paper,
 Scissors game:
 
+=for author
+
+This seems like an rather verbose example.  Also, I'm not sure how to work 
+mention of continue into it.  Perhaps something like this (pretty much ripped
+from perldoc perlsyn) might suffice?
+
+given($foo) {
+    when (undef) {
+        say '$foo is undefined';
+    }
+    when ([2, 3, 5, 7, 11, 13, 17, 19]) {
+        say '$foo is a prime less than 20';
+        continue; 
+    }
+    when ($_ % 2){
+        say '$foo is odd';
+        continue;
+    }
+    when ($_ < 20) {
+        say '$foo is numerically less than 20';
+    }
+    default {
+        say q{I don't know what to say about $foo};
+    }
+}
+
+
+=end for
+
 =begin programlisting
 
     my @options = ( \&rock, \&paper, \&scissors );
@@ -1053,7 +1102,7 @@ Scissors game:
             when (/paper/)    { say 'You win!' };
             when (/rock/)     { say 'We tie!'  };
             when (/scissors/) { say 'I win!'   };
-            default           { say 'I don't understand your move' };
+            default           { say "I don't understand your move" };
         }
     }
 
@@ -1066,7 +1115,7 @@ Scissors game:
             when (/paper/)    { say 'We tie!'  };
             when (/rock/)     { say 'I win!'   };
             when (/scissors/) { say 'You win!' };
-            default           { say 'I don't understand your move' };
+            default           { say "I don't understand your move" };
         }
     }
 
@@ -1079,7 +1128,7 @@ Scissors game:
             when (/paper/)    { say 'I win!'   };
             when (/rock/)     { say 'You win!' };
             when (/scissors/) { say 'We tie!'  };
-            default           { say 'I don't understand your move' };
+            default           { say "I don't understand your move" };
         }
     }
 
