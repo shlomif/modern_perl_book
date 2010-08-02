@@ -14,10 +14,11 @@ X<default scalar variable>
 X<variables; $_>
 X<$_>
 
-The best example a linguistic shortcut in Perl is the default scalar variable,
-C<$_>.  It's most notable in its I<absence>: many of Perl's built in operations
-perform their work on the contents of C<$_> in the absence of an explicit
-variable.  You can still use C<$_> as the variable, but it's often unnecessary.
+The default scalar variable, C<$_>, is the best example of a linguistic
+shortcut in Perl.  It's most notable in its I<absence>: many of Perl's built in
+operations perform their work on the contents of C<$_> in the absence of an
+explicit variable.  You can still use C<$_> as the variable, but it's often
+unnecessary.
 
 For example, the C<chomp> operator removes any trailing newline sequence from
 the given string:
@@ -76,7 +77,8 @@ Check how many other string functions this includes?
 Many of Perl's scalar operators work on the default scalar variable if you do
 not provide an alternative.
 
-Perl's looping constructs also set C<$_>, such as C<for> iterating over a list:
+Perl's looping directives (L<looping_directives>) also set C<$_>, such as
+C<for> iterating over a list:
 
 =begin programlisting
 
@@ -170,9 +172,10 @@ X<default array variables>
 X<variables; @_>
 X<@_>
 
-Perl passes arguments to functions in an array named C<@_>.  Array manipulation
-operations (L<arrays>) performed inside functions affect this array by
-default.  Thus, these two snippets of code are equivalent:
+While Perl has a single implicit scalar variable, it has two implicit array
+variables.  Perl passes arguments to functions in an array named C<@_>.  Array
+manipulation operations (L<arrays>) performed inside functions affect this
+array by default.  Thus, these two snippets of code are equivalent:
 
 =begin programlisting
 
@@ -191,25 +194,23 @@ default.  Thus, these two snippets of code are equivalent:
 =end programlisting
 
 I<Unlike> C<$_>, Perl automatically localizes C<@_> for you when you call other
-functions.  Array functions such as C<unshift>, C<push>, C<splice>, and
-C<pop> operate on C<@_>.
+functions.  The array operators C<shift> and C<pop> operate on C<@_> with no
+other operands provided.
 
 X<variables; @ARGV>
 X<@ARGV>
 
-Outside of a function, the default array variable is C<@ARGV>.  This array
-represents all command-line arguments to the program.  The same array functions
-which use C<@_> implicitly I<within> functions use C<@ARGV> implicitly at the
-top level of a program outside of any function.  You cannot use C<@_> when you
-mean C<@ARGV>.
+Outside of all functions, the default array variable C<@ARGV> contains the
+command-line arguments to the program.  The same array operators which use
+C<@_> implicitly I<within> functions use C<@ARGV> implicitly outside of
+functions.  You cannot use C<@_> when you mean C<@ARGV>.
 
 X<null filehandle>
-X<@ARGV>
 
-Perl uses C<@ARGV> implicitly in one special case where it does not use C<@_>.
-If you read from the null filehandle C<< <> >>, Perl will treat every element
-in C<@ARGV> as the I<name> of a file to open for reading.  (If C<@ARGV> is
-empty, Perl will read from standard input.)  It's easy to write a simple
+C<ARGV> has one special case.  If you read from the null filehandle C<< <> >>,
+Perl will treat every element in C<@ARGV> as the I<name> of a file to open for
+reading.  (If C<@ARGV> is empty, Perl will read from standard input.) This
+implicit C<@ARGV> behavior is useful for writing short programs, such as this
 command-line filter which reverses its input:
 
 =begin programlisting
@@ -222,6 +223,16 @@ command-line filter which reverses its input:
 
 =end programlisting
 
+=begin sidebar
+
+Why C<scalar>?  C<say> imposes list context on its operands.  C<reverse> passes
+its context on to its operands, treating them as a list in list context and a
+concatenated string in scalar context.  If this sounds confusing, it can be: if
+Perl 5 arguably should have had different operators for these different
+operations.
+
+=end sidebar
+
 If you run it with a list of files:
 
 =begin screen
@@ -233,6 +244,3 @@ If you run it with a list of files:
 ... the result will be one long stream of output.  Without any arguments, you
 can provide your own standard input by piping in from another program or typing
 directly.
-
-The implicit C<@ARGV> behavior can be useful for writing short filter programs
-in Perl, but avoid it in larger programs.

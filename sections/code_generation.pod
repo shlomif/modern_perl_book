@@ -27,7 +27,7 @@ The C<AUTOLOAD> technique (L<autoload>) for missing functions and methods
 demonstrates this technique in a constrained form; Perl 5's function and method
 dispatch system allows you to customize what happens when normal lookup fails.
 
-=head3 C<eval>
+=head3 eval
 
 X<eval string>
 X<operators; eval>
@@ -78,7 +78,7 @@ but not others:
 
         sub set_$methname
         {
-            my (\$self, \$value) = @_;
+            my (\$self, \$value) = \@_;
 
             \$self->{$attrname} = \$value;
         }
@@ -165,10 +165,12 @@ step:
 =begin programlisting
 
     {
-        # a subtle bug
         no strict 'refs';
 
-        *{ $methname } = sub { ... };
+        *{ $methname } = sub {
+            # subtle bug: strict refs
+            # are disabled in here too
+        };
     }
 
 =end programlisting
@@ -176,6 +178,26 @@ step:
 This example disables strictures for the outer block as well as the inner
 block, the body of the function itself.  Only the assignment violates strict
 reference checking, so disable strictures for that operation alone.
+
+=begin sidebar
+
+If the name of the method is a string literal in your source code, rather than
+the contents of a variable, you can assign to the relevant symbol directly
+rather than through a symbolic reference:
+
+=begin programlisting
+
+    {
+        no warnings 'once';
+        (*get_homecourt, *set_homecourt) = generate_accessors( 'homecourt' );
+    }
+
+=end programlisting
+
+This does not violate strictures, but it does produce a "used only once"
+warning unless you explicitly suppress it within the scope.
+
+=end sidebar
 
 =head3 Compile-time Manipulation
 
@@ -297,20 +319,48 @@ To create a class:
 X<metaclass>
 X<OO; metaclass>
 
-You can add methods and attributes to this class when you create it, and you
-can perform introspection on the class with the I<metaclass> (the object which
-represents that class) returned from the C<create()> constructor.  Similarly
-you can create and manipulate and introspect attributes and methods with
-C<Class::MOP::Attribute> and C<Class::MOP::Method>.
+You can add attributes and methods to this class when you create it:
 
-=for author
+=begin programlisting
+    use Class::MOP;
 
-Does this need more of an example?
+    my $class = Class::MOP::Class->create(
+        'Monkey::Wrench' =>
+        (
+            attributes =>
+            (
+                Class::MOP::Attribute->new( '$material' ),
+                Class::MOP::Attribute->new( '$color' ),
+            )
+            methods =>
+            {
+                tighten => sub { ... },
+                loosen  => sub { ... },
+            }
+        ),
+    );
 
-Ideas: applying roles to object instances (which is basically
-generating code), generating classes from a database schema or XML
-Schema structure, ... not all of these with concrete examples yet.
-But metaprogramming is very cool :-).  Perhaps worth noting that it is
-this very flexibility that has allowed Moose itself to be written.
+=end programlisting
 
-=end for
+... or add them to the I<metaclass> (the object which represents that class)
+after you've created it:
+
+=begin programlisting
+
+    $class->add_attribute( experience  => Class::MOP::Attribute->new( '$xp' ) );
+    $class->add_method(    bash_zombie => sub { ... } );
+
+=end programlisting
+
+... and you can perform introspection on the metaclass:
+
+=begin programlisting
+
+    my @attrs = $class->get_all_attributes();
+    my @meths = $class->get_all_methods();
+
+=end programlisting
+
+You can similarly create and manipulate and introspect attributes and methods
+with C<Class::MOP::Attribute> and C<Class::MOP::Method>.  This metaobject
+protocol and the flexibility it affords powers Moose (L<moose>).

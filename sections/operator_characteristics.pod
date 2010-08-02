@@ -102,8 +102,9 @@ applies the rightmost operator (C<->) to the result of the first operation and
 the rightmost operand (C<4>).
 
 One common source of confusion for Perl novices is the interaction of listary
-operators (especially function calls) with nested expressions.  Grouping
-parentheses clarify, yet watch out for confusion in code such as:
+operators (especially function calls) with nested expressions.  Using grouping
+parentheses to clarify your intent, yet watch out for confusion in code such
+as:
 
 =begin programlisting
 
@@ -135,7 +136,7 @@ X<fixity; postcircumfix>
 
 The I<fixity> of an operator is its position relative to its operands.  The
 mathematic operators tend to be I<infix> operators, where they appear between
-their operands.  Other operators are C<prefix>, where they appear before their
+their operands.  Other operators are I<prefix>, where they appear before their
 operands; these tend to be unary operators, such as the prefix increment
 operator C<++$x> or the mathematical and boolean negation operators (C<-$x> and
 C<!$x>, respectively).  I<Postfix> operators appear after their operands (such

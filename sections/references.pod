@@ -228,10 +228,10 @@ Surround a list of values or expressions with square brackets:
 
 =end programlisting
 
-This array reference behaves the same as named array references.  Do note,
-however, that anonymous array references I<always> create a new reference,
-while taking a reference to a named array always refers to the I<same> array
-with regard to scoping.  That is to say:
+This array reference behaves the same as named array references, except that
+anonymous array references I<always> create a new reference, while taking a
+reference to a named array always refers to the I<same> array with regard to
+scoping.  That is to say:
 
 =begin programlisting
 
@@ -342,10 +342,9 @@ execution.
 
 =begin sidebar
 
-A common novice typo is to assign an anonymous hash to a standard hash.  If you
-have warnings enabled, you'll receive a warning about an odd number of elements
-in the hash.  Use parentheses for a named hash and curly brackets for an
-anonymous hash.
+A common novice typo is to assign an anonymous hash to a standard hash.  This
+produces a warning about an odd number of elements in the hash.  Use
+parentheses for a named hash and curly brackets for an anonymous hash.
 
 =end sidebar
 
