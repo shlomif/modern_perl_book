@@ -1,8 +1,8 @@
-=head2 Scalars
+=head1 Scalars
 
 Z<scalars>
 
-X<scalar>
+X<scalars>
 
 Perl 5's fundamental data type is the I<scalar>, which represents a single,
 discrete value.  That value may be a string, an integer, a floating point
@@ -10,20 +10,23 @@ value, a filehandle, or a reference--but it is always a single value.  Scalar
 values and scalar context have a deep connection; assigning to a scalar
 provides scalar context.
 
+X<C<$>; sigil>
+X<sigils; C<$>>
+
 Scalars may be lexical, package, or global (L<globals>) variables.  You may
 only declare lexical or package variables.  The names of scalar variables must
-conform to the L<names> guidelines.  Scalar variables always use the leading
-dollar-sign (C<$>) sigil (L<sigils>).
+conform to standard variable naming guidelines (L<names>).  Scalar variables
+always use the leading dollar-sign (C<$>) sigil (L<sigils>).
 
 =begin sidebar
 
 The converse is not I<universally> true; the scalar sigil applied to an
-operation on an aggregate variable determines the amount type accessed through
-that operation (L<arrays>, L<hashes>).
+operation on an aggregate variable--an array or a hash--determines the amount
+type accessed through that operation.
 
 =end sidebar
 
-=head3 Scalars and Types
+=head2 Scalars and Types
 
 Perl 5 scalars do not have static typing.  A scalar variable can contain any
 type of scalar value without special conversions or casts, and the type of
@@ -42,10 +45,9 @@ value in a variable can change.  This code is legal:
 Yet even though this is I<legal>, it can be confusing.  Choose descriptive and
 unique names for your variables to avoid this confusion.
 
-The type context of evaluation of a scalar may cause Perl to perform a coercion
-of the value of that scalar (L<coercion>).  For example, you may treat the
-contents of a scalar as a string, even if you didn't explicitly assign it a
-string:
+The type context of evaluation of a scalar may cause Perl to coerce the value
+of that scalar (L<coercion>).  For example, you may treat the contents of a
+scalar as a string, even if you didn't explicitly assign it a string:
 
 =begin programlisting
 
@@ -54,11 +56,11 @@ string:
 
 =end programlisting
 
-You may also perform mathematical operations on strings:
+You may also use mathematical operations on strings:
 
 =begin programlisting
 
-    my $call_sign = 'KB7MIU';
+    my $call_sign = 'KBMIU';
     my $next_sign = $call_sign++;
 
     # also fine as
@@ -73,16 +75,16 @@ X<increment; string>
 
 =begin sidebar
 
-Note that this magical string increment behavior does not have a corresponding
-magical decrement behavior.  You can't get the previous string value by writing
+This magical string increment behavior does not have a corresponding magical
+decrement behavior.  You can't get the previous string value by writing
 C<$call_sign-->.
 
 =end sidebar
 
 This string increment operation turns C<a> into C<b> and C<z> into C<aa>,
-respecting character set and case.  Note that C<ZZ9> becomes C<ZZ0> and C<ZZ09>
-becomes C<ZZ10>, however--numbers wrap around but do not carry to alphabetic
-components.
+respecting character set and case.  While C<ZZ9> becomes C<AA0>, C<ZZ09>
+becomes C<ZZ10>--numbers wrap around while there are more significant places to
+increment, as on a vehicle odometer.
 
 X<stringification>
 X<numification>
@@ -96,7 +98,7 @@ either the string or numeric result:
 
     my $authors     = [qw( Pratchett Vinge Conway )];
     my $stringy_ref = '' . $authors;
-    my $numeric_ref =  0 . $authors;
+    my $numeric_ref =  0 + $authors;
 
 =end programlisting
 
@@ -104,12 +106,10 @@ C<$authors> is still useful as a reference, but C<$stringy_ref> is a string
 with no connection to the reference and C<$numeric_ref> is a number with no
 connection to the reference.
 
-
-X<Scalar::Util>
+X<C<Scalar::Util>>
 X<dualvars>
-X<dualvar(); Scalar::Util>
-X<looks_like_number()>
-X<looks_like_number;Scalar::Util>
+X<C<dualvar()>>
+X<C<looks_like_number()>>
 
 All of these coercions and operations are possible because Perl 5 scalars can
 contain numeric parts as well as string parts.  The internal data structure
@@ -123,8 +123,8 @@ number.
 
 X<boolean>
 X<scalars; boolean values>
-X<boolean true>
-X<boolean false>
+X<boolean; true>
+X<boolean; false>
 X<strings; true>
 X<strings; false>
 X<numbers; true>
@@ -136,10 +136,10 @@ boolean context, numbers which evaluate to zero (C<0>, C<0.0>, and C<0e0>) are
 false.  All other numbers are true.
 
 Be careful that the I<strings> C<'0.0'> and C<'0e0'> are true; this is one
-place where Perl 5 makes distinction what looks like a number and what really
-is a number.
+place where Perl 5 makes a distinction between what looks like a number and
+what really is a number.
 
-X<undef>
+X<C<undef>>
 
 One other value is always false: C<undef>.  This is the value of uninitialized
 variables as well as a value in its own right.

@@ -1,4 +1,4 @@
-=head2 Variables
+=head1 Variables
 
 Z<variables>
 X<variable>
@@ -11,23 +11,7 @@ the side lengths of every right triangle you can imagine.  This may seem basic
 and obvious, but to write robust, well-designed, testable, and composable
 programs, you must identify and exploit points of genericity wherever possible.
 
-=head3 Variable Naming
-
-X<variables; names>
-
-Not all variables require names, but most of the variables you will encounter
-in your programs will have names.  Variables in Perl 5 must conform to the
-standard rules of identifier naming (L<names>).  Variables also have leading
-sigils.
-
-=for author
-
-the Variable Naming section seems quite redundant with the Variable Names and Sigils
-section from names.pod, which gets inserted directly above this section in chapter 3
-
-=end for
-
-=head3 Variable Scopes
+=head2 Variable Scopes
 
 Z<variable_scopes>
 
@@ -35,51 +19,8 @@ X<variables; scope>
 X<scope>
 
 Variables also have visibility, depending on their scope (L<scope>).  Most of
-the variables you will encounter have lexical scope L<lexical_scope>), as the
-expected visibility of these variables is local.
-
-Package variables have global visibility throughout the program, but they are
-only available when prefixed with the name of the containing package.  For
-example:
-
-=begin programlisting
-
-    package Store::IceCream;
-
-    use vars '$num_flavors';
-    $num_flavors = 42;
-
-=end programlisting
-
-X<pragmas; vars>
-X<vars>
-
-The C<vars> pragma declares a global variable without violating the rules of
-the C<strict> pragma.  Within the C<Store::IceCream> package, C<$num_flavors>
-is available without a namespace prefix.  Outside of that package, it is
-available as C<$Store::IceCream::num_flavors>.  If C<$num_flavors> were a
-lexical variable (declared with C<my>), it would not be available outside of
-the enclosing scope.
-
-X<our>
-X<keywords; our>
-
-You may also declare package variables with the C<our> keyword.  Unlike C<vars>
-variables, these variables have a lexical scope:
-
-=begin programlisting
-
-    {
-        package Store::Candy;
-
-        our $jellybeans;
-    }
-
-    # $Store::Candy::jellybeans not visible as $jellybeans here
-
-=end programlisting
-
-... yet remember that files themselves have their own lexical scopes, where the
+the variables you will encounter have lexical scope (L<lexical_scope>).
+Remember that files themselves have their own lexical scopes, such that the
 C<package> declaration on its own does not create a new scope:
 
 =begin programlisting
@@ -95,28 +36,7 @@ C<package> declaration on its own does not create a new scope:
 
 =end programlisting
 
-=begin sidebar
-
-X<lexicals; pads>
-X<lexpads>
-X<symbol tables>
-
-This difference in visibility between package variables and lexical variables
-is apparent in the different storage mechanisms of these variables within Perl
-5 itself.  Lexical variables get stored in I<lexical pads> attached to scopes.
-Every new entry into such a lexical scope requires Perl to create a new pad to
-contain the values of the variables for that particular entry into the scope.
-(This is how a function can call itself and not clobber the values of
-existing variables.)
-
-Package variables have a storage mechanism called symbol tables.  Each package
-has a single symbol table, and every package variable has an entry in this
-table.  You can inspect and modify this symbol table from Perl; this is how
-importing works (L<importing>).
-
-=end sidebar
-
-=head3 Variable Sigils
+=head2 Variable Sigils
 
 Z<sigils>
 
@@ -126,36 +46,37 @@ X<sigils>
 In Perl 5, the sigil of the variable in a declaration determines the type of
 the variable, whether scalar, array, or hash.  The sigil of the variable used
 to access the variable determines the type of access to its value.  Sigils on
-variables vary depending on what you do to the variable.  For example, you
-declare an array as C<@values>.  You access the first element--a single
-value--of the array with C<$values[0]>.  You access a list of values from the
-array with C<@values[ @indices ]>.  See the arrays (L<arrays>) and hashes
-(L<hashes>) sections for more.
+variables vary depending on what you do to the variable.  For example, declare
+an array as C<@values>.  Access the first element--a single value--of the array
+with C<$values[0]>.  Access a list of values from the array with C<@values[
+@indices ]>.
 
-=head3 Anonymous Variables
+=head2 Anonymous Variables
 
 X<anonymous variables>
 X<variables; anonymous>
 
-Perl 5 variables do not I<need> names; Perl can allocate storage space for
-variables without storing them in lexical pads or symbol tables.  These are
-I<anonymous> variables.  The only way to access them is by reference
-(L<references>).
+Perl 5 variables do not I<need> names; Perl manages variables just fine without
+caring about how you refer to them.  Variables created without literal names in
+your source code (such as C<$apple>, C<@boys>, C<%cheeseburgers>) are
+I<anonymous> variables.  The only way to access anonymous variables is by
+reference (L<references>).
 
-=head3 Variables, Types, and Coercion
+=head2 Variables, Types, and Coercion
 
 X<variables; types>
-X<types; containers>
-X<types; variables>
-X<container types>
+X<variables; container type>
+X<variables; value type>
 
-Perl 5 variables do not enforce types on their values.  You may store a string
-in a variable in one line, append to that variable a number on the next, and
-reassign a reference to a function (L<function_references>) on the third.  The
-types of the I<values> is flexible (or dynamic), but the type of the
-I<variable> is static.  A scalar variable can only hold scalars.  An array
-variable only contains lists.  A hash variable must contain an even-sized list
-of key/value pairs.
+A variable in Perl 5 represents two things: the value (a dollar value, a list
+of pizza toppings, a group of guitar shops and their phone numbers) and the
+container which stores that value.  Perl 5's type system deals with I<value
+types> and I<container types>.  A variable's value type--whether a value is a
+string or a number, for example--can change.  You may store a string in a
+variable in one line, append to that variable a number on the next, and
+reassign a reference to a function (L<function_references>) on the third.  A
+variable's I<container type>--whether it's a scalar, an array, or a
+hash--cannot change.
 
 Assigning to a variable may cause coercion (L<coercion>).  The documented way
 to determine the number of entries in an array is to evaluate that array in

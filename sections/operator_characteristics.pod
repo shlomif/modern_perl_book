@@ -1,4 +1,4 @@
-=head2 Operator Characteristics
+=head1 Operator Characteristics
 
 Z<operator_characteristics>
 X<operators; characteristics>
@@ -13,7 +13,7 @@ Every operator possesses several important characteristics which govern its
 behavior: the number of operands on which it operates, its relationship to
 other operators, and its syntactic possibilities.
 
-=head3 Precedence
+=head2 Precedence
 
 Z<precedence>
 X<precedence>
@@ -21,15 +21,14 @@ X<precedence>
 The I<precedence> of an operator helps determine when Perl should evaluate it
 in an expression.  Evaluation order proceeds from highest to lowest precedence.
 For example, because the precedence of multiplication is higher than the
-precedence of addition, C<7 + 7
-* 10> evaluates to C<77>, not C<140>.
-You may force the evaluation of some operators before others by grouping their
+precedence of addition, C<7 + 7 * 10> evaluates to C<77>, not C<140>.  You may
+force the evaluation of some operators before others by grouping their
 subexpressions in parentheses; C<(7 + 7) * 10> I<does> evaluate to C<140>, as
 the addition operation becomes a single unit which must evaluate fully before
 multiplication can occur.
 
 In case of a tie--where two operators have the same precedence--other factors
-(L<fixity> and L<associativity>) break the tie.
+such as fixity (L<fixity>) and associativity (L<associativity>) break the tie.
 
 C<perldoc perlop> contains a table of precedence.  Almost no one has this table
 memorized.  The best way to manage precedence is to keep your expressions
@@ -37,19 +36,19 @@ simple.  The second best way is to use parentheses to clarify precedence in
 complex expressions.  If you find yourself drowning in a sea of parentheses,
 see the first rule again.
 
-=head3 Associativity
+=head2 Associativity
 
 Z<associativity>
 X<associativity>
 X<associativity; left>
-X<left associative>
+X<left associativity>
 X<associativity; right>
-X<right associative>
+X<right associativity>
 
 The I<associativity> of an operator governs whether it evaluates from left to
 right or right to left.  Addition is left associative, such that C<2 + 3 + 4>
 evaluates C<2 + 3> first, then adds C<4> to the result.  Exponentiation is
-right associative, such that C<2 ** 3 ** 4> performs C<3 ** 4> first, then
+right associative, such that C<2 ** 3 ** 4> evaluates C<3 ** 4> first, then
 raises C<2> to the 81st power.
 
 Simplifying complex expressions and using parentheses to demonstrate your
@@ -58,7 +57,7 @@ memorizing the associativity of the mathematic operators is worthwhile.
 
 =begin sidebar
 
-X<B::Deparse>
+X<C<B::Deparse>>
 X<precedence; disambiguation>
 X<associativity; disambiguation>
 
@@ -71,7 +70,7 @@ section; use variables instead, as in C<$x ** $y ** $z>.
 
 =end sidebar
 
-=head3 Arity
+=head2 Arity
 
 Z<arity>
 
@@ -118,7 +117,7 @@ operators denoting the arguments to C<say>, not circumfix parentheses grouping
 an expression to change precedence.  In other words, the code prints the value
 C<6> and evaluates to the return value of C<say> multiplied by C<4>.
 
-=head3 Fixity
+=head2 Fixity
 
 Z<fixity>
 X<fixity>
@@ -134,15 +133,56 @@ X<fixity; circumfix>
 X<postcircumfix>
 X<fixity; postcircumfix>
 
-The I<fixity> of an operator is its position relative to its operands.  The
-mathematic operators tend to be I<infix> operators, where they appear between
-their operands.  Other operators are I<prefix>, where they appear before their
-operands; these tend to be unary operators, such as the prefix increment
-operator C<++$x> or the mathematical and boolean negation operators (C<-$x> and
-C<!$x>, respectively).  I<Postfix> operators appear after their operands (such
-as postfix increment C<$x++>).  I<Circumfix> operators surround their operands,
-such as the anonymous hash and anonymous array creation operators or quoting
-operators (C<{ ... }> and C<[ ... ]> or C<qq{ ... }>, for example).
-I<Postcircumfix> operators surround some operands but follow others, as in the
-case of array or hash indices (C<$hash{ ... }> and C<$array[ ... ]>, for
-example).
+An operator's I<fixity> is its position relative to its operands:
+
+X<C<.>; infix operator>
+X<C<.=>; infix operator>
+X<C<..>; infix operator>
+X<C<...>; infix operator>
+X<C<=~>; infix operator>
+X<C<!~>; infix operator>
+X<C<|>; infix operator>
+X<C<||>; infix operator>
+X<C<//>; infix operator>
+X<C<|=>; infix operator>
+X<C<||=>; infix operator>
+X<C<//=>; infix operator>
+
+=over 4
+
+=item I<Infix> operators appear between their operands.  Most mathematical
+operators are infix operators, such as the multiplication operator in C<$length
+* $width>.
+
+X<C<\>; prefix operator>
+X<C<~>; prefix operator>
+X<C<++>; prefix operator>
+X<C<-->; prefix operator>
+X<C<+>; prefix operator>
+X<C<->; prefix operator>
+X<C<!>; prefix operator>
+X<C<!!>; prefix operator>
+
+=item I<Prefix> operators appear before their operators and I<postfix>
+operators appear after.  These operators tend to be unary, such as mathematic
+negation (C<-$x>), boolean negation (C<!$y>), and postfix increment (C<$z++>).
+
+X<C<()>; circumfix operator>
+X<C<{}>; circumfix operator>
+X<C<[]>; circumfix operator>
+X<C<//>; circumfix operator>
+X<C<``>; circumfix operator>
+X<C<''>; circumfix operator>
+X<C<"">; circumfix operator>
+
+=item I<Circumfix> operators surround their operands.  Examples include the
+anonymous hash constructor (C<{ ... }>) and quoting operators (C<qq[ ... ]>).
+
+X<C<()>; postcircumfix operator>
+X<C<{}>; postcircumfix operator>
+X<C<[]>; postcircumfix operator>
+
+=item I<Postcircumfix> operators follow certain operands and surround others,
+as with hash or array element access (C<$hash{ ...  }> and C<$array[ ... ]>).
+
+=back

@@ -1,4 +1,4 @@
-=head1 Perl and Its Community
+=head0 Perl and Its Community
 
 One of Larry's main goals for Perl 5 was to encourage Perl development and
 evolution outside the core distribution.  Perl 4 had several forks, because
@@ -16,7 +16,7 @@ them.
 Fortunately, the Perl community exists.  It's strong and healthy.  It welcomes
 willing participants at all levels--and not just for people who produce and
 share code.  Consider taking advantage of the knowledge and experience of
-countless other Perl programmers, and to share your abilities as well.
+countless other Perl programmers, and sharing your abilities as well.
 
 L<perl_community>
 

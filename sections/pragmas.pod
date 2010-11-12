@@ -1,4 +1,4 @@
-=head2 Pragmas
+=head1 Pragmas
 
 Z<pragmas>
 
@@ -6,14 +6,14 @@ Perl 5's extension mechanism is modules (L<modules>).  Most modules provide
 functions to call or they define classes (L<moose>), but some modules instead
 influence the behavior of the language itself.
 
-X<pragma>
+X<pragmas>
 X<modules; pragmas>
 
 A module which influences the behavior of the compiler is a I<pragma>.  By
 convention, pragmas have lower-case names to differentiate them from other
 modules.  You've heard of some before: C<strict> and C<warnings>, for example.
 
-=head3 Pragmas and Scope
+=head2 Pragmas and Scope
 
 X<pragmas; scope>
 
@@ -39,7 +39,7 @@ pragma with funny syntax.  Pragma scope is clearer with an example:
 
 =begin sidebar
 
-A sufficiently motivated Perl guru could implement a poorly behaved pragma
+A sufficiently motivated Perl guru could implement a poorly-behaved pragma
 which ignores scoping, but that would be unneighborly.
 
 =end sidebar
@@ -60,10 +60,9 @@ effects on inner scopes:
 
 =end programlisting
 
-=head3 Using Pragmas
+=head2 Using Pragmas
 
 X<pragmas; enabling>
-X<pragmas; customizing>
 
 Pragmas have the same usage mechanism as modules.  As with modules, you may
 specify the desired version number of the pragma and you may pass a list of
@@ -71,14 +70,15 @@ arguments to the pragma to control its behavior at a finer level:
 
 =begin programlisting
 
-    # require variable declaration; prohibit bareword function names
+    # require variable declarations; prohibit bareword function names
     use strict qw( subs vars );
 
 =end programlisting
 
 X<pragmas; disabling>
+X<builtins; C<no>>
 
-Within a scope you may disable all or part of a pragma with the C<no> keyword:
+Within a scope you may disable all or part of a pragma with the C<no> builtin:
 
 =begin programlisting
 
@@ -92,34 +92,49 @@ Within a scope you may disable all or part of a pragma with the C<no> keyword:
 
 =end programlisting
 
-=head3 Useful Core Pragmas
+=head2 Useful Core Pragmas
 
-X<pragmas; useful>
+X<pragmas; useful core pragmas>
 
 Perl 5 includes several useful core pragmas:
+
+X<pragmas; C<strict>>
 
 =over 4
 
 =item * the C<strict> pragma enables compiler checking of symbolic references,
 the use of barewords, and the declaration of variables
 
+X<pragmas; C<warnings>>
+
 =item * the C<warnings> pragma enables optional warnings for deprecated,
 unintended, and awkward behaviors that are not I<necessarily> errors but may
 produce unwanted behaviors
 
+X<pragmas; C<utf8>>
+
 =item * the C<utf8> pragma enables the use of the UTF-8 encoding of source code
 
+X<pragmas; C<autodie>>
+
 =item * the C<autodie> pragma (new in 5.10.1) enables automatic error checking
-of system calls and keywords, reducing the need for manual error checking
+of system calls and builtins, reducing the need for manual error checking
+
+X<pragmas; C<constant>>
 
 =item * the C<constant> pragma allows you to create compile-time constant
 values (though see C<Readonly> from the CPAN for an alternative)
+
+X<pragmas; C<vars>>
 
 =item * the C<vars> pragma allows you to declare package global variables, such
 as C<$VERSION> or those for exporting (L<exporting>) and manual OO
 (L<blessed_references>)
 
 =back
+
+X<C<autobox>>
+X<C<perl5i>>
 
 Several useful pragmas exist on the CPAN as well.  Two worth exploring in
 detail are C<autobox>, which enables object-like behavior for Perl 5's core
@@ -129,18 +144,6 @@ two pragmas may not belong yet in your production code without extensive
 testing and thoughtful consideration, but they demonstrate the power and
 utility of pragmas.
 
-=head3 Your own Pragmas
-
-=for author
-
-Is this ending worthwhile?  What a downer.
-
-=end for
-
-Since Perl 5.10.0, generalized hooks to implement lexical pragmas are
-available.  They are accessible directly from Perl code.  
-
-See C<perldoc perlpragma> for instructions to write your own pragmas.
-If you're interested in learning how it all works behind the scenes,
-the place to go is the C<$^H> variable's explanation in
-C<perldoc perlvar>.
+Perl 5.10.0 added the ability to write your own lexical pragmas in pure Perl
+code.  C<perldoc perlpragma> explains how to do so, while the explanation of
+C<$^H> in C<perldoc perlvar> explains how the feature works.

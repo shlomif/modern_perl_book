@@ -1,7 +1,4 @@
-Please add yourself to this file in alphabetical order in this format:
-
-N: <name>
-E: <email address>
+Please add yourself to this file.
 
 N: chromatic
 E: chromatic@wgz.org
@@ -17,6 +14,9 @@ E: alexm@cpan.org
 
 N: Bruce Gray
 E: bruce.gray@acm.org
+
+N: John McNamara
+E: jmcnamara@cpan.org
 
 N: Josh McAdams
 E: joshua.mcadams@gmail.com
@@ -57,7 +57,7 @@ E: sam@vilain.net
 N: Colin Wetherbee
 E: cww@cpan.org
 
-N: Dan Scott (dbs on Github)
+N: Dan Scott
 E: dan@coffeecode.net
 
 N: Shlomi Fish
@@ -131,3 +131,78 @@ E: cpan@audreyt.org
 
 N: Lee Aylward
 E: lee@laylward.com
+
+N: Mark Fowler
+E: mark@twoshortplanks.com
+
+N: Dmitry Chestnykh
+E: dmitry@codingrobots.com
+
+N: harleypig
+E: harleypig@gmail.com
+
+N: Jess Robinson
+E: castaway@desert-island.me.uk
+
+N: David Yingling
+E: deeelwy@yahoo.com
+
+N: Marko Zagozen
+E: ?
+
+N: Alexander Scott-Johns
+E: alexander.scott.johns@googlemail.com
+
+N: Larry Wall
+E: larry@wall.org
+
+N: Gabrielle Roth
+E: gorthx@gmail.com>
+
+N: Mohammed Arafat Kamaal
+E: makamaal.linux@gmail.com
+
+N: Christopher E. Stith
+E: cstith@gmail.com
+
+N: Mike Huffman
+E: mhuffman@aracnet.com
+
+N: E. Choroba
+E: choroba on PerlMonks
+
+N: hbm
+E: hbm on PerlMonks
+
+N: Ask Bjørn Hansen
+E: ask@develooper.com
+
+N: Ævar Arnfjörð Bjarmason
+E: avar@cpan.org
+
+N: Gareth McCaughan
+E: gareth.mccaughan@pobox.com
+
+N: Robert Hicks
+E: rlhicks@wehicks.com
+
+N: Chris Niswander
+E: cnp1@chrisniswander.com
+
+N: Andrew Grangaard
+E: spazm@cpan.org
+
+N: Mark Hindess
+E: soft-cpan@temporalanomaly.com
+
+N: John Bokma
+E: contact@johnbokma.com
+
+N: Lorne Schachter
+E: lorne.schachter@citi.com
+
+N: Dave Rolsky
+E: autarch@urth.org
+
+N: Ben Tilly
+E: btilly@gmail.com

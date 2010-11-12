@@ -1,4 +1,4 @@
-=head2 Nested Data Structures
+=head1 Nested Data Structures
 
 Z<nested_data_structures>
 X<data structures>
@@ -10,7 +10,7 @@ you to access aggregate data types indirectly, through special scalars.  Nested
 data structures in Perl, such as an array of arrays or a hash of hashes, are
 possible through the use of references.
 
-=head3 Declaring Nested Data Structures
+=head2 Declaring Nested Data Structures
 
 A simple declaration of an array of arrays might be:
 
@@ -38,12 +38,12 @@ A simple declaration of an array of arrays might be:
 
 =begin sidebar
 
-Perl allows but does not require the trailing comma so to ease adding new
+Perl allows but does not require the trailing comma so as to ease adding new
 elements to the list.
 
 =end sidebar
 
-=head3 Accessing Nested Data Structures
+=head2 Accessing Nested Data Structures
 
 Accessing elements in nested data structures uses Perl's reference syntax.  The
 sigil denotes the amount of data to retrieve, and the dereferencing arrow
@@ -103,10 +103,10 @@ this construct.  Sometimes using temporary variables can clarify:
 
 =end programlisting
 
-C<perldoc perldsc>, the data structures cookbook, gives copious examples of
-various types of data structures available in Perl with their syntax.
+C<perldoc perldsc>, the data structures cookbook, gives copious examples of how
+to use the various types of data structures available in Perl.
 
-=head3 Autovivification
+=head2 Autovivification
 
 Z<autovivification>
 X<autovivification>
@@ -118,7 +118,6 @@ through the data structure to that piece if it does not exist:
 =begin programlisting
 
     my @aoaoaoa;
-
     $aoaoaoa[0][0][0][0] = 'nested deeply';
 
 =end programlisting
@@ -132,12 +131,13 @@ structure will create intermediary hashes, keyed appropriately:
 =begin programlisting
 
     my %hohoh;
-
     $hohoh{Robot}{Santa}{Claus} = 'mostly harmful';
 
 =end programlisting
 
 X<autovivification>
+X<C<autovivification> pragma>
+X<pragmas; C<autovivification>>
 
 This behavior is I<autovivification>, and it's more often useful than it isn't.
 Its benefit is in reducing the initialization code of nested data structures.
@@ -156,24 +156,29 @@ elements in arrays before dereferencing each level of a complex data structure,
 but that can produce tedious, lengthy code which many programmers prefer to
 avoid.
 
+=end sidebar
+
 You may wonder at the contradiction between taking advantage of
-autovivification while enabling C<strictures>.  The question is one of balance.
+autovivification while enabling C<strict>ures.  The question is one of balance.
 is it more convenient to catch errors which change the behavior of your program
 at the expense of disabling those error checks for a few well-encapsulated
 symbolic references?  Is it more convenient to allow data structures to grow
 rather than specifying their size and allowed keys?
 
-The answer to the latter question depends on your specific project.
+The answer to the latter question depends on your specific project.  When
+initially developing, you can allow yourself the freedom to experiment.  When
+testing and deploying, you may want to increase strictness to prevent unwanted
+side effects.  Thanks to the lexical scoping of the C<strict> and
+C<autovivification> pragmas, you can enable and disable these behaviors as
+necessary.
 
-=end sidebar
-
-=head3 Debugging Nested Data Structures
+=head2 Debugging Nested Data Structures
 
 The complexity of Perl 5's dereferencing syntax combined with the potential for
 confusion with multiple levels of references can make debugging nested data
 structures difficult.  Two good options exist for visualizing them.
 
-X<Data::Dumper>
+X<C<Data::Dumper>>
 
 The core module C<Data::Dumper> can stringify values of arbitrary complexity
 into Perl 5 code:
@@ -196,13 +201,12 @@ verbose output.  Some developers prefer the use of the C<YAML::XS> or C<JSON>
 modules for debugging.  You have to learn a different format to understand
 their outputs, but their outputs can be much clearer to read and to understand.
 
-=head3 Circular References
+=head2 Circular References
 
 Z<circular_references>
 
 X<circular references>
 X<memory management; circular references>
-X<memory management>
 X<garbage collection>
 
 Perl 5's memory management system of reference counting (L<reference_counts>)
@@ -230,10 +234,10 @@ exist, and it can't manage the lifespan of these entities.
 
 X<references; weak>
 X<weak references>
-X<Scalar::Util>
+X<C<Scalar::Util>>
 
 You must either break the reference count manually yourself (by clearing the
-children of C<$alice> and C<$bob> or the parents of C<$cianne>), or take
+children of C<$alice> and C<$robert> or the parents of C<$cianne>), or take
 advantage of a feature called I<weak references>.  A weak reference is a
 reference which does not increase the reference count of its referent.  Weak
 references are available through the core module C<Scalar::Util>.  Export the
@@ -262,15 +266,14 @@ collector from destroying those data structures.  You rarely have to use weak
 references if you design your data structures correctly, but they're useful in
 a few situations.
 
-=head3 Alternatives to Nested Data Structures
+=head2 Alternatives to Nested Data Structures
 
 While Perl is content to process data structures nested as deeply as you can
 imagine, the human cost of understanding these data structures as well as the
 relationship of various pieces, not to mention the syntax required to access
 various portions, can be high.  Beyond two or three levels of nesting, consider
 whether modeling various components of your system with classes and objects
-(L<moose>) will allow you to operate on your data within encapsulation
-boundaries.
+(L<moose>) will allow for a clearer representation of your data.
 
 Sometimes bundling data with behaviors appropriate to that data can clarify
 code.

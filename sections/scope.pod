@@ -1,4 +1,4 @@
-=head2 Scope
+=head1 Scope
 
 Z<scope>
 
@@ -10,7 +10,7 @@ with a name in Perl (a variable, a function) has a scope.  Scoping helps to
 enforce I<encapsulation>--keeping related concepts together and preventing them
 from leaking out.
 
-=head3 Lexical Scope
+=head2 Lexical Scope
 
 Z<lexical_scope>
 
@@ -19,10 +19,8 @@ X<scope; lexical>
 
 The most common form of scoping in modern Perl is lexical scoping.  The Perl
 compiler resolves this scope during compilation.  This scope is visible as you
-I<read> a program.
-
-To create a new lexical scope, create a block delimited by curly braces.  This
-block can be a bare block, the block of a loop construct, the block of a C<sub>
+I<read> a program.  A block delimited by curly braces creates a new scope,
+whether a bare block, the block of a loop construct, the block of a C<sub>
 declaration, an C<eval> block, or any other non-quoting block:
 
 =begin programlisting
@@ -109,10 +107,11 @@ outer scope hides, or I<shadows>, the outer lexical:
 
 =end programlisting
 
-This program prints C<Edward> and then C<Jacob>.  Even though redeclaring a
-lexical variable with the same name and type in a single lexical scope produces
-a warning message, shadowing a lexical in a nested scope does not; this is a
-feature of lexical shadowing.
+This program prints C<Edward> and then C<Jacob>N<Family members and not
+vampires, if you must know.>.  Even though redeclaring a lexical variable with
+the same name and type in a single lexical scope produces a warning message,
+shadowing a lexical in a nested scope does not; this is a feature of lexical
+shadowing.
 
 =begin sidebar
 
@@ -163,24 +162,25 @@ within its block:
 lexicalize the topic yourself, though this is more useful when considering
 dynamic scope.
 
-Finally, lexical scoping facilitates closures (see L<closures>).  Beware
-creating closures accidentally.
+Finally, lexical scoping facilitates closures (L<closures>).  Beware creating
+closures accidentally.
 
-=head4 Our Scope
+=head3 Our Scope
 
 Z<our>
-X<our>
-X<package scope>
+X<builtins; C<our>>
+X<packages; scope>
+X<scope; packages>
 
 Within a given scope, you may declare an alias to a package variable with the
-C<our> keyword.  Like C<my>, C<our> enforces lexical scoping--of the alias.
+C<our> builtin.  Like C<my>, C<our> enforces lexical scoping--of the alias.
 The fully-qualified name is available everywhere, but the lexical alias is
 visible only within its scope.
 
 The best use of C<our> is for variables you absolutely I<must> have, such as
 C<$VERSION>.
 
-=head3 Dynamic Scope
+=head2 Dynamic Scope
 
 Z<dynamic_scope>
 
@@ -225,48 +225,51 @@ calling context.  Consider the example:
 The program begins by declaring an C<our> variable, C<$scope>, as well as three
 functions.  It ends by assigning to C<$scope> and calling C<main()>.
 
-X<local>
+X<builtins; C<local>>
 
 Within C<main()>, the program prints C<$scope>'s current value, C<outer scope>,
 then C<local>izes the variable.  This changes the visibility of the symbol
 within the current lexical scope I<as well as> in any functions called from the
-current lexical scope.  Thus, C<$scope> contains C<main() scope> within the body of
-both C<middle()> and C<inner()>.  After C<main()> returns--at the point of
-exiting the block containing the C<local>ization of C<$scope>, Perl restores
+current lexical scope.  Thus, C<$scope> contains C<main() scope> within the
+body of both C<middle()> and C<inner()>.  After C<main()> returns--at the point
+of exiting the block containing the C<local>ization of C<$scope>, Perl restores
 the original value of the variable.  The final C<say> prints C<outer scope>
 once again.
 
-Note that the variable is I<visible> within all scopes, but the I<value> of the
+While the variable is I<visible> within all scopes, the I<value> of the
 variable changes depending on C<local>ization and assignment.  This feature can
 be tricky and subtle, but it is especially useful for changing the values of
-special variables.
+magic variables.
 
-You may only C<local>ize global and package global variables.  You cannot
-C<local>ize lexical variables.
+X<lexicals; pads>
+X<lexpads>
+X<symbol tables>
 
-=begin sidebar
+This difference in visibility between package variables and lexical variables
+is apparent in the different storage mechanisms of these variables within Perl
+5 itself.  Every scope which contains lexical variables has a special data
+structure called a I<lexical pad> or I<lexpad> which can store the values for
+its enclosed lexical variables.  Every time control flow enters one of these
+scopes, Perl creates another lexpad for the values of those lexical variables
+for that particular call.  (This is how a function can call itself and not
+clobber the values of existing variables.)
 
-You I<can> localize functions and methods, but that's deep magic to avoid
-unless absolutely necessary.
+Package variables have a storage mechanism called symbol tables.  Each package
+has a single symbol table, and every package variable has an entry in this
+table.  You can inspect and modify this symbol table from Perl; this is how
+importing works (L<importing>).  This is also why you may only C<local>ize
+global and package global variables and never lexical variables.
 
-=end sidebar
+X<C<$/>>
+X<magic variables; C<$/>>
+X<C<$!>>
+X<magic variables; C<$!>>
+X<C<$@>>
+X<magic variables; C<$@>>
+X<C<$|>>
+X<magic variables; C<$|>>
 
-X<$/>
-X<special variables; $/>
-X<$!>
-X<special variables; $!>
-X<$@>
-X<special variables; $@>
-X<$|>
-X<special variables; $|>
-
-=for author
-
-Decide whether to use "special" or "magic".
-
-=end for
-
-It's common to C<local>ize several special variables.  For example, C<$/>, the
+It's common to C<local>ize several magic variables.  For example, C<$/>, the
 input record separator, governs how much data a C<readline> operation will read
 from a filehandle.  C<$!>, the system error variable, contains the error number
 of the most recent system call.  C<$@>, the Perl C<eval> error variable,
@@ -278,15 +281,16 @@ These are all special global variables; C<local>izing them in the narrowest
 possible scope will avoid the action at a distance problem of modifying global
 variables used other places in your code.
 
-=head3 State Scope
+=head2 State Scope
 
-Z<state>
+Z<state_scope>
 
-X<state>
+X<C<state>>
+X<builtins; C<state>>
 X<scope; state>
 
 A final type of scope is new as of Perl 5.10.  This is the scope of the
-C<state> keyword.  State scope resembles lexical scope in that it declares a
+C<state> builtin.  State scope resembles lexical scope in that it declares a
 lexical variable, but the value of that variable gets initialized I<once>, and
 then persists:
 

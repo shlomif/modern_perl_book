@@ -1,13 +1,15 @@
-=head2 Arrays
+=head1 Arrays
 
 Z<arrays>
 X<arrays>
-X<first-class>
 
 Perl 5 I<arrays> are data structures which store zero or more scalars.  They're
 I<first-class> data structures, which means that Perl 5 provides a separate
 data type at the language level.  Arrays support indexed access; that is, you
 can access individual members of the array by integer indexes.
+
+X<C<@> sigil>
+X<sigils; C<@>>
 
 The C<@> sigil denotes an array.  To declare an array:
 
@@ -17,10 +19,11 @@ The C<@> sigil denotes an array.  To declare an array:
 
 =end programlisting
 
-=head3 Array Elements
+=head2 Array Elements
 
-X<variant sigils>
-X<sigils; variance>
+X<sigils; variant>
+X<C<$>; sigil>
+X<sigils; C<$>>
 
 I<Accessing> an individual element of an array in Perl 5 requires the scalar
 sigil.  Perl 5 (and you) can recognize that C<$cats[0]> refers to the C<@cats>
@@ -71,6 +74,9 @@ from the number of elements of the array (because array indexes start at 0):
 
 =end programlisting
 
+X<C<$#>; sigil>
+X<sigils; C<$#>>
+
 You can also use the special variable form of the array to find the last index;
 replace the C<@> array sigil with the slightly more unwieldy C<$#>:
 
@@ -86,8 +92,8 @@ replace the C<@> array sigil with the slightly more unwieldy C<$#>:
 
 That may not read as nicely, however.  Most of the time you don't need that
 syntax, as you can use negative offsets to access an array from the end instead
-of the start.  The final element of an array is available at the index C<-1>.
-The penultimate element of the array is available at index C<-2>, and so on.
+of the start.  The last element of an array is available at the index C<-1>.
+The second to last element of the array is available at index C<-2>, and so on.
 For example:
 
 =begin programlisting
@@ -101,7 +107,7 @@ You can resize an array by assigning to C<$#>.  If you shrink an array, Perl
 will discard values which do not fit in the resized array.  If you expand an
 array, Perl will fill in the expanded values with C<undef>.
 
-=head3 Array Assignment
+=head2 Array Assignment
 
 You can assign to individual positions in an array directly by index:
 
@@ -154,8 +160,8 @@ Any expression which produces a list in list context can assign to an array:
 
 =end programlisting
 
-Assigning to a scalar element of an array enforces scalar context, while
-assigning to the array as a whole enforces list context.
+Assigning to a scalar element of an array imposes scalar context, while
+assigning to the array as a whole imposes list context.
 
 To clear an array, assign an empty list:
 
@@ -174,10 +180,12 @@ version of C<my @items>.  Prefer the latter.
 
 =end sidebar
 
-=head3 Array Slices
+=head2 Array Slices
 
-X<array slice>
+X<arrays; slices>
 X<slices; array>
+X<C<@>; sigil>
+X<sigils; C<@>>
 
 You can also access elements of an array in list context with a construct known
 as an I<array slice>.  Unlike scalar access of an array element, this indexing
@@ -213,7 +221,7 @@ A slice can contain zero or more elements--including one:
 
 The only syntactic difference between an array slice of one element and the
 scalar access of an array element is the leading sigil.  The I<semantic>
-difference is greater: an array slice always enforces list context.  Any array
+difference is greater: an array slice always imposes list context.  Any array
 slice evaluated in scalar context will produce a warning:
 
 =begin screen
@@ -232,14 +240,16 @@ used as its index:
 
 =end programlisting
 
-=head3 Array Operations
+=head2 Array Operations
 
 Managing array indices can be a hassle.  Because Perl 5 can expand or contract
 arrays as necessary, the language also provides several operations to treat
 arrays as stacks, queues, and the like.
 
-X<push>
-X<pop>
+X<arrays; C<push>>
+X<arrays; C<pop>>
+X<builtins; C<push>>
+X<builtins; C<pop>>
 
 The C<push> and C<pop> operators add and remove elements from the tail of the
 array, respectively:
@@ -260,6 +270,11 @@ You may C<push> as many elements as you like onto an array.  Its second
 argument is a list of values.  You may only C<pop> one argument at a time.
 C<push> returns the updated number of elements in the array.  C<pop> returns
 the removed element.
+
+X<arrays; C<shift>>
+X<arrays; C<unshift>>
+X<builtins; C<shift>>
+X<builtins; C<unshift>>
 
 Similarly, C<unshift> and C<shift> add elements to and remove an element from
 the start of an array:
@@ -286,19 +301,34 @@ context.
 
 =end sidebar
 
-X<splice>
+X<arrays; C<splice>>
+X<builtins; C<splice>>
 
 C<splice> is another important--if less frequently used--array operator.  It
 removes and replaces elements from an array given an offset, a length of a list
 slice, and replacements.  Both replacing and removing are optional; you may
 omit either behavior.  The C<perlfunc> description of C<splice> demonstrates
-its equivalences with C<push>, C<pop>, C<shift>, and C<unshift>.  Note that the
-other operators are shorter and simpler to read and understand.
+its equivalences with C<push>, C<pop>, C<shift>, and C<unshift>.
 
-Arrays often contain elements to process in a loop; see L<looping_directives>
-for more detail about Perl 5 control flow and array processing.
+Arrays often contain elements to process in a loop (L<looping_directives>).
 
-=head3 Arrays and Context
+X<arrays; C<each>>
+X<builtins; C<each>>
+
+As of Perl 5.12, you can use C<each> to iterate over an array by index and
+value:
+
+=begin programlisting
+
+    while (my ($index, $value) = each @bookshelf)
+    {
+        say "#$index: $value";
+        ...
+    }
+
+=end programlisting
+
+=head2 Arrays and Context
 
 X<list context; arrays>
 
@@ -321,11 +351,10 @@ normal Perl 5 function, they will flatten into a single list:
 
 =end programlisting
 
-Within the function, C<@_> will contain seven elements, not two.
-
-As well, list assignment to arrays is I<greedy>.  An array will consume as many
-elements from the list as possible.  After the assignment, C<@cats> will
-contain I<every> argument passed to the function.  C<@dogs> will be empty.
+Within the function, C<@_> will contain seven elements, not two.  Similarly,
+list assignment to arrays is I<greedy>.  An array will consume as many elements
+from the list as possible.  After the assignment, C<@cats> will contain
+I<every> argument passed to the function.  C<@dogs> will be empty.
 
 This flattening behavior sometimes confuses novices who attempt to create
 nested arrays in Perl 5:
@@ -345,14 +374,14 @@ containing the numbers one through 30, inclusive.  Remember that parentheses do
 not I<create> lists in these circumstances--they only group expressions.
 
 The solution to this flattening behavior is the same for passing arrays to
-functions and for creating nested arrays (L<references>).
+functions and for creating nested arrays (L<array_references>).
 
-=head3 Array Interpolation
+=head2 Array Interpolation
 
-X<array interpolation>
+X<arrays; interpolation>
 X<interpolation; arrays>
-X<$">
-X<$LIST_SEPARATOR>
+X<C<$">>
+X<C<$LIST_SEPARATOR>>
 
 Arrays interpolate in double quoted strings as a list of the stringification of
 each item separated by the current value of the magic global C<$">.  The
@@ -369,7 +398,7 @@ is C<$LIST_SEPARATOR>.  Thus:
 
 Temporarily localizing and assigning another value to C<$"> for debugging
 purposes is very handyN<Due credit goes to Mark-Jason Dominus for demonstrating
-this example several years ago>:
+this example several years ago.>:
 
 =begin programlisting
 
