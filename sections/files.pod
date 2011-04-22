@@ -40,10 +40,11 @@ X<C<__END__>>
 
 The special C<DATA> filehandle represents the current file.  When Perl finishes
 compiling the file, it leaves the package global C<DATA> available and open at
-the end of the compilation unit.  If you store string data after C<__DATA__> or
-C<__END__>, you can read that from the C<DATA> filehandle.  This is useful for
-short, self-contained programs.  C<perldoc perldata> describes this feature in
-more detail.
+the end of the compilation unit I<if> the file has a C<__DATA__> or C<__END__>
+section at the end.  If you store string data after C<__DATA__> or C<__END__>,
+you can read that from the C<DATA> filehandle.  This is useful for short,
+self-contained programs.  C<perldoc perldata> describes this feature in more
+detail.
 
 =end sidebar
 
@@ -311,8 +312,8 @@ X<C<FileHandle>>
 X<C<FileHandle>; C<autoflush()>>
 
 In lieu of the global variable, use the C<autoflush()> method on a lexical
-filehandle.  Be sure to load C<FileHandle> first, as you cannot call methods on
-lexical filehandles otherwise:
+filehandle.  Be sure to load C<FileHandle> first, as you cannot call the
+methods it provides on lexical filehandles otherwise:
 
 =begin programlisting
 
@@ -329,11 +330,13 @@ lexical filehandles otherwise:
 X<C<FileHandle>; C<input_line_number()>>
 X<C<FileHandle>; C<input_record_separator()>>
 X<C<IO::Handle>>
+X<C<IO::Seekable>>
 
 Once you have loaded C<FileHandle>, you may also use its C<input_line_number()>
 and C<input_record_separator()> methods instead of C<$.> and C<$/>
-respectively.  See C<perldoc FileHandle> and C<perldoc IO::Handle> for more
-information.
+respectively.  To use the C<seek()> method on filehandles, load
+C<IO::Seekable>, and so on.  See C<perldoc FileHandle>, C<perldoc IO::Handle>,
+and C<perldoc IO::Seekable> for more information.
 
 =begin sidebar
 
@@ -479,7 +482,16 @@ You can even open filehandles to directories and files:
 =end programlisting
 
 Both C<Path::Class::Dir> and C<Path::Class::File> offer further useful
-behaviors.
+behaviors--though beware that if you use a C<Path::Class> object of some kind
+with other Perl 5 code such as an operator or function which expects a string
+containing a file path, you need to stringify the object yourself. This is a
+persistent but minor annoyance.
+
+=begin programlisting
+
+    my $contents = read_from_filename( "$lunch" );
+
+=end programlisting
 
 =head2 File Manipulation
 
